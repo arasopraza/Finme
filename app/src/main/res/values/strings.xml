@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Finme</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="hello_there">Hello There!</string>
+    <string name="not_registered">Not registered?</string>
+    <string name="create_account">Create account</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="user">User</string>
+    <string name="income_record">Income Record</string>
+    <string name="expense_record">Expense Record</string>
+</resources>
