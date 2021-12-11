@@ -10,4 +10,6 @@
     <string name="user">User</string>
     <string name="income_record">Income Record</string>
     <string name="expense_record">Expense Record</string>
+    <string name="register_an_account">Register an Account</string>
+    <string name="register">Register</string>
 </resources>
