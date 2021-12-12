@@ -30,23 +30,29 @@ class LoginActivity : AppCompatActivity() {
             mViewModel.inputPassword.postValue(password)
 
             mViewModel.authUser()
-            
-
-//            mViewModel.errorToast.observe(this, { hasError ->
-//                if (hasError == true) {
-//                    Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
-//                    mViewModel.doneToast()
-//                }
-//            })
-
-            mViewModel.navigateToHome.observe(this, { auth ->
-                if (auth == true) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.putExtra(EXTRA_NAME, email)
-                    startActivity(intent)
-                }
-            })
         }
+
+        mViewModel.errorPasswordToast.observe(this, { hasError ->
+            if (hasError == true) {
+                Toast.makeText(this, "Password Salah, Ulangi kembali", Toast.LENGTH_SHORT).show()
+                mViewModel.doneToast()
+            }
+        })
+
+        mViewModel.errorToast.observe(this, { hasError ->
+            if (hasError == true) {
+                Toast.makeText(this, "Password kosong", Toast.LENGTH_SHORT).show()
+                mViewModel.doneToast()
+            }
+        })
+
+        mViewModel.navigateToHome.observe(this, { auth ->
+            if (auth == true) {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(EXTRA_NAME, mViewModel.inputUsername.value)
+                startActivity(intent)
+            }
+        })
 
         bindingLogin.tvCreate.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)

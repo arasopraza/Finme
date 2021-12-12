@@ -7,17 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arsy.finme.data.source.FinmeRepository
 import com.arsy.finme.data.source.local.entity.UserEntity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class LoginViewModel(private val repository: FinmeRepository) : ViewModel() {
     val inputUsername = MutableLiveData<String>()
     val inputPassword = MutableLiveData<String>()
 
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.IO + viewModelJob)
     private val _navigateToHome = MutableLiveData<Boolean>()
 
     val navigateToHome: LiveData<Boolean>
@@ -28,21 +23,23 @@ class LoginViewModel(private val repository: FinmeRepository) : ViewModel() {
     val errorToast: LiveData<Boolean>
         get() = _errorToast
 
+    private val _errorPasswordToast = MutableLiveData<Boolean>()
+
+    val errorPasswordToast: LiveData<Boolean>
+        get() = _errorPasswordToast
+
     fun authUser() {
         if (inputUsername.value == null || inputPassword.value == null) {
             _errorToast.value = true
         } else {
-            uiScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 val user = repository.loginUser(inputUsername.value!!)
-                if (user != null) {
-                    if (user.password == inputPassword.value) {
+                if (user.password == inputPassword.value) {
+                    withContext(Dispatchers.Main) {
                         _navigateToHome.postValue(true)
-                    } else {
-                        Log.i("Finme", "Done Login")
                     }
-                    Log.i("Finme", "Done Login")
                 } else {
-                    Log.i("Finme", "Failed Login")
+                    _errorPasswordToast.value = true
                 }
             }
         }
