@@ -1,52 +1,45 @@
 package com.arsy.finme.ui.login
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.arsy.finme.data.source.FinmeRepository
-import com.arsy.finme.data.source.local.entity.UserEntity
-import kotlinx.coroutines.*
+import androidx.lifecycle.*
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class LoginViewModel(private val repository: FinmeRepository) : ViewModel() {
-    val inputUsername = MutableLiveData<String>()
-    val inputPassword = MutableLiveData<String>()
+class LoginViewModel() : ViewModel(), LifecycleObserver {
+    private var auth: FirebaseAuth? = null
+    var loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val _navigateToHome = MutableLiveData<Boolean>()
-
-    val navigateToHome: LiveData<Boolean>
-        get() = _navigateToHome
-
-    private val _errorToast = MutableLiveData<Boolean>()
-
-    val errorToast: LiveData<Boolean>
-        get() = _errorToast
-
-    private val _errorPasswordToast = MutableLiveData<Boolean>()
-
-    val errorPasswordToast: LiveData<Boolean>
-        get() = _errorPasswordToast
-
-    fun authUser() {
-        if (inputUsername.value == null || inputPassword.value == null) {
-            _errorToast.value = true
-        } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                val user = repository.loginUser(inputUsername.value!!)
-                if (user.password == inputPassword.value) {
-                    withContext(Dispatchers.Main) {
-                        _navigateToHome.postValue(true)
-                    }
-                } else {
-                    _errorPasswordToast.value = true
-                }
-            }
-        }
+    init {
+        auth = Firebase.auth
+        loading.postValue(false)
     }
 
-    fun doneToast() {
-        _errorToast.value = false
-        Log.i("MYTAG", "Done taoasting ")
+    private val _signInStatus = MutableLiveData<Boolean>()
+    val signInStatus: LiveData<Boolean> = _signInStatus
+
+    fun signIn(email: String, password: String) {
+        loading.postValue(true)
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                auth?.let { login->
+                    login.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { task: Task<AuthResult> ->
+                            if (task.isSuccessful) {
+                                _signInStatus.postValue(true)
+                                // Sign in success, update UI with the signed-in user's information
+                            } else {
+                                _signInStatus.postValue(false)
+                            }
+                            loading.postValue(false)
+                        }
+                }
+            } catch (e: Exception){
+                loading.postValue(false)
+            }
+        }
     }
 }

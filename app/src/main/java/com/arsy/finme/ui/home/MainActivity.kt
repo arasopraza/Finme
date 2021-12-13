@@ -3,6 +3,10 @@ package com.arsy.finme.ui.home
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.arsy.finme.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var bindingHome: ActivityMainBinding
@@ -12,10 +16,7 @@ class MainActivity : AppCompatActivity() {
         bindingHome = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingHome.root)
 
-        bindingHome.user.text = intent.getStringExtra(EXTRA_NAME)
-    }
-
-    companion object {
-        const val EXTRA_NAME = "name"
+        val user = Firebase.auth.currentUser
+        bindingHome.user.text = user?.email
     }
 }

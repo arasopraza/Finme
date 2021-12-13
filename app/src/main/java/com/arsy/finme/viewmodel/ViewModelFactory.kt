@@ -7,6 +7,7 @@ import com.arsy.finme.data.source.FinmeRepository
 import com.arsy.finme.di.Injection
 import com.arsy.finme.ui.login.LoginViewModel
 import com.arsy.finme.ui.register.RegisterViewModel
+import kotlinx.coroutines.Dispatchers
 
 class ViewModelFactory private constructor(private val mFinmeRepository: FinmeRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -28,7 +29,7 @@ class ViewModelFactory private constructor(private val mFinmeRepository: FinmeRe
                 RegisterViewModel(mFinmeRepository) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel(mFinmeRepository) as T
+                LoginViewModel() as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

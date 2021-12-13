@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "406341984619",
+    "project_id": "finme-174be",
+    "storage_bucket": "finme-174be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406341984619:android:4814c761bdda99b85f2c2e",
+        "android_client_info": {
+          "package_name": "com.arsy.finme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406341984619-b689tcmuj344tb451ge1ammtug4ap3l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpBzqHZmt98s51lJ4ZQGYuOnYS_VdcWuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406341984619-b689tcmuj344tb451ge1ammtug4ap3l9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
