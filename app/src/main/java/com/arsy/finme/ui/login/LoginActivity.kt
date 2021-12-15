@@ -15,10 +15,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var bindingLogin: ActivityLoginBinding
-    private lateinit var mViewModel: LoginViewModel
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,15 +27,16 @@ class LoginActivity : AppCompatActivity() {
         setContentView(bindingLogin.root)
 
         val factory = ViewModelFactory.getInstance(this)
-        mViewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
+        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
 
         auth = Firebase.auth
 
-        observerLoading()
+        initObservable()
+        checkCurrentUser()
+
         bindingLogin.btnLogin.setOnClickListener {
             val email = bindingLogin.email.text.toString()
             val password = bindingLogin.password.text.toString()
-
             if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "Email atau password tidak boleh kosong", Toast.LENGTH_SHORT).show()
             } else {
@@ -48,24 +50,36 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    fun checkCurrentUser() {
+        // [START check_current_user]
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            // User is signed in
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            // [END check_current_user]
+        }
+    }
+
     private fun signIn(email: String, password: String) {
-        mViewModel.signIn(email, password)
-        mViewModel.signInStatus.observe(this, { success ->
+        viewModel.signIn(email, password)
+    }
+
+    private fun initObservable() {
+        viewModel.loading.observe(this, {
+            if (!it) {
+                bindingLogin.progressBar.visibility = View.GONE
+            } else {
+                bindingLogin.progressBar.visibility = View.VISIBLE
+            }
+        })
+
+        viewModel.signInStatus.observe(this, { success ->
             if (success == true) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun observerLoading() {
-        mViewModel.loading.observe(this, {
-            if (!it) {
-                bindingLogin.progressBar.visibility = View.GONE
-            } else {
-                bindingLogin.progressBar.visibility = View.VISIBLE
             }
         })
     }
