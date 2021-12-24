@@ -26,7 +26,7 @@ class ViewModelFactory private constructor(private val mFinmeRepository: FinmeRe
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
-                RegisterViewModel(mFinmeRepository) as T
+                RegisterViewModel() as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel() as T
