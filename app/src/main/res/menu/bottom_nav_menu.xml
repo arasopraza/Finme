@@ -10,4 +10,9 @@
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile" />
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/profile" />
 </menu>

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.arsy.finme.ui.home.HomeFragment"
-        android:label="@string/profile"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
@@ -16,4 +16,10 @@
         android:name="com.arsy.finme.ui.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.arsy.finme.ui.history.HistoryFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_history" />
 </navigation>

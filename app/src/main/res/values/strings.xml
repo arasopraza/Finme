@@ -17,4 +17,7 @@
     <string name="account_info">Account Info</string>
     <string name="join_since">Join since</string>
     <string name="log_out">Log out</string>
+    <string name="date">Date</string>
+    <string name="amount">Amount</string>
+    <string name="category">Category</string>
 </resources>
